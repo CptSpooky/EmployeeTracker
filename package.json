@@ -1,14 +1,15 @@
 {
-  "name": "top-5000-songs",
+  "name": "employeetracker",
   "version": "1.0.0",
   "description": "",
-  "main": "TopSongsCode.js",
+  "main": "db.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^6.2.1",
     "mysql": "^2.16.0"
   }
