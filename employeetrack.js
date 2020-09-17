@@ -79,6 +79,7 @@ function addEmpPrompt (roleList, empList) {
          database.addEmployee(answer.firstName, answer.lastName, role, answer.managerID, (err, res) => {
             console.log(res);
             console.log(err);
+            menu();
          });
       });
    
@@ -127,7 +128,7 @@ function addRoles(){
 // view Departments function
 function viewDepa () {
    database.getDepartments().then( list => {
-      list.forEach(row => console.log(row.name));
+      console.table("Departments", list);
       menu();
    });
 }
@@ -140,14 +141,15 @@ function viewEmp () {
    });
 }
 
-// // view Roles function
-// function viewRoles () {
-//    database.getList((err, res) => {
-//       console.log(res);
-//    });
-// }
+// view Roles function
+function viewRoles () {
+   database.getRoles().then( list => {
+      console.table("Roles", list);
+      menu();
+   });
+}
   
-// Questions and switch
+// Questions and main function
 function menu (){
    inquirer.prompt([
       {
@@ -160,7 +162,8 @@ function menu (){
          {value: 3, name: "Add roles"},
          {value: 4, name: "View departments"},
          {value: 5, name: "View employees"},
-         {value: 6, name: "View roles"}
+         {value: 6, name: "View roles"},
+         {value: 7, name: "Exit"}
       ]
    }])
       .then(function(answer) {
@@ -171,10 +174,15 @@ function menu (){
             case 4: viewDepa(); break;
             case 5: viewEmp(); break;
             case 6: viewRoles(); break;
+            case 7: exit(); break;
             }
       });
 }
 
-
+//start program
 menu();
-//database.close();
+
+// exit
+function exit(){
+   database.close();
+}
