@@ -1,0 +1,8 @@
+node_modules
+.DS_Store
+._Database.js
+._schema.sql
+._employeetrack.js
+._package.json
+._package-lock.json
+._README.md
