@@ -30,7 +30,8 @@
   To install, you just need to download the files, go into your terminal and make sure you're in the right directory and you have node.js installed, then run 'npm i'. That should install all modules. 
 
   ## Usage
-  In the same directory as the app.js file, type 'node employeetrack.js' in your terminal to run the program. Answer the employee question prompts, select exit to stop program. 
+  In the same directory as the app.js file, type 'node employeetrack.js' in your terminal to run the program. Answer the employee question prompts, select exit to stop program. Don't forget to put in your password in between the quotes inside the Database.js file!
+  ![pass](https://user-images.githubusercontent.com/66426144/93517419-6ac40d80-f8f9-11ea-959f-c7675c1ad4f3.png)
 
   ## License
   [MIT](https://opensource.org/licenses/MIT)
