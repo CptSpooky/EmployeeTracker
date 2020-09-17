@@ -6,7 +6,7 @@ const database = new Database();
 console.log("test");
 
 // add Department function
-function addDepa () {
+function addDepaMenu () {
    inquirer.prompt([
       {
          type: "input",
@@ -25,15 +25,23 @@ function addDepa () {
 }
 
 // 
-function addEmp() {
+function addEmpMenu() {
    let p1 = database.getRoles();
    let p2 = database.getEmployees();
-   Promise.all([p1, p2]).then(values => addEmpPrompt(values[0], values[1]));
+   Promise.all([p1, p2]).then(values => addEmpPrompt(null, values[0], values[1]));
+
+}
+
+// gets specific employee id from updateEmp, gets roles and employees from database and sends id to addEmpPrompt so user can change properties of specific employee
+function updEmp(id) {
+   let p1 = database.getRoles();
+   let p2 = database.getEmployees();
+   Promise.all([p1, p2]).then(values => addEmpPrompt(id, values[0], values[1]));
 
 }
 
 // add Employee function
-function addEmpPrompt (roleList, empList) {
+function addEmpPrompt (id, roleList, empList) {
 
    let roles = [];
    let managers = [];
@@ -76,20 +84,51 @@ function addEmpPrompt (roleList, empList) {
    ])
       .then(function(answer) {
          let role = parseInt(answer.role);
-         database.addEmployee(answer.firstName, answer.lastName, role, answer.managerID, (err, res) => {
-            console.log(res);
-            console.log(err);
-            menu();
-         });
+         if (id == null){
+            database.addEmployee(answer.firstName, answer.lastName, role, answer.managerID, (err, res) => {
+               menu();
+            });
+         } else {
+            database.updateEmployee(id, answer.firstName, answer.lastName, role, answer.managerID, (err, res) => {
+               menu();
+            });
+          }
       });
    
 }
 
-function addRoles(){
+// get list for the updateEmp function
+function updateEmpMenu(){
+   database.getEmployees().then(updateEmp);
+}
+
+// Update employee
+function updateEmp(empList){
+   let employees = [];
+   empList.forEach(row => {
+      employees.push({ value: row.id, name: row.first_name + " " + row.last_name });
+   });
+
+   inquirer.prompt([
+      {
+         type: "list",
+         name: "update",
+         message: "Which employee would you like to update?",
+         choices: employees
+      } 
+   ])
+      .then(function(answer) {
+         updEmp(answer.update);
+      });
+
+}
+
+// get roles list from database
+function addRolesMenu(){
    database.getDepartments().then(addRolesPrompt);
 }
 
- // add Roles function
+ // add Roles function with list from addRoles
  function addRolesPrompt (depList) {
    let deps = [];
 
@@ -125,24 +164,24 @@ function addRoles(){
       });
  }
 
-// view Departments function
-function viewDepa () {
+// view Departments function, gets list of departments
+function viewDepaMenu () {
    database.getDepartments().then( list => {
       console.table("Departments", list);
       menu();
    });
 }
 
-// view Employees function
-function viewEmp () {
-   database.getEmployees().then( list => {
+// view Employees function, gets full list of employees
+function viewEmpMenu () {
+   database.getEmployeesFull().then( list => {
       console.table("Employees", list);
       menu();
    });
 }
 
-// view Roles function
-function viewRoles () {
+// view Roles function, gets list of roles
+function viewRolesMenu () {
    database.getRoles().then( list => {
       console.table("Roles", list);
       menu();
@@ -163,18 +202,20 @@ function menu (){
          {value: 4, name: "View departments"},
          {value: 5, name: "View employees"},
          {value: 6, name: "View roles"},
-         {value: 7, name: "Exit"}
+         {value: 7, name: "Update employee"},
+         {value: 8, name: "Exit"}
       ]
    }])
       .then(function(answer) {
          switch (answer.selection) {
-            case 1: addDepa(); break;
-            case 2: addEmp(); break;
-            case 3: addRoles(); break;
-            case 4: viewDepa(); break;
-            case 5: viewEmp(); break;
-            case 6: viewRoles(); break;
-            case 7: exit(); break;
+            case 1: addDepaMenu(); break;
+            case 2: addEmpMenu(); break;
+            case 3: addRolesMenu(); break;
+            case 4: viewDepaMenu(); break;
+            case 5: viewEmpMenu(); break;
+            case 6: viewRolesMenu(); break;
+            case 7: updateEmpMenu(); break;
+            case 8: exit(); break;
             }
       });
 }
