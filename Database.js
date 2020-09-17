@@ -35,10 +35,6 @@ class Database {
 
     // add employee into table
     addEmployee(firstName, lastName, role, manager, cb) {
-
-        if (manager == 0) {
-            manager = null;
-        }
         const query = "INSERT INTO employee_tracker.employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?);";
         this.connection.query(query, [firstName, lastName, role, manager], cb);
     }
@@ -79,13 +75,28 @@ class Database {
     getEmployeesFull(){
         
         const query =
-        "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name as 'department' " +
+        "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name as 'department', employee.manager_id as 'manager'" +
         "FROM employee_tracker.employee " +
-        "LEFT JOIN role ON (employee.id = role.id) " +
-        "LEFT JOIN department ON (department.id = role.id);";
+        "LEFT JOIN role ON (employee.role_id = role.id) " +
+        "LEFT JOIN department ON (department.id = role.department_id);";
 
         let promise = new Promise((resolve, reject) => {
             this.connection.query(query, (err, res) => {
+
+                // get manager name on table
+                res.forEach(row => {
+                    let managerId = row.manager;
+                    let managerName = "nobody";
+                    console.log(managerId);
+                    for (let i = 0; i < res.length; i++){
+                        if(res[i].id == managerId){
+                            managerName = res[i].first_name + " " + res[i].last_name;
+                            break;
+                        }
+                    }
+                    row.manager = managerName;
+                });
+
                 resolve(res);
             });    
         });

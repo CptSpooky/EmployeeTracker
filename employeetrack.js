@@ -46,14 +46,16 @@ function addEmpPrompt (id, roleList, empList) {
    let roles = [];
    let managers = [];
 
+   roles.push({value: null, name: "No Roll"});
+
    roleList.forEach(row => {
-      roles.push({ value: row.id, name: row.title });
+      roles.push({ value: parseInt(row.id), name: row.title });
    });
 
-   managers.push({value: 0, name: "No Manager"});
+   managers.push({value: null, name: "No Manager"});
 
    empList.forEach(row => {
-      managers.push({ value: row.id, name: row.first_name + " " + row.last_name });
+      managers.push({ value: parseInt(row.id), name: row.first_name + " " + row.last_name });
    });
 
 
@@ -83,13 +85,12 @@ function addEmpPrompt (id, roleList, empList) {
    
    ])
       .then(function(answer) {
-         let role = parseInt(answer.role);
          if (id == null){
-            database.addEmployee(answer.firstName, answer.lastName, role, answer.managerID, (err, res) => {
+            database.addEmployee(answer.firstName, answer.lastName, answer.role, answer.managerID, (err, res) => {
                menu();
             });
          } else {
-            database.updateEmployee(id, answer.firstName, answer.lastName, role, answer.managerID, (err, res) => {
+            database.updateEmployee(id, answer.firstName, answer.lastName, answer.role, answer.managerID, (err, res) => {
                menu();
             });
           }
@@ -196,9 +197,9 @@ function menu (){
       name: "selection",
       message: "What do you want to do?",
       choices: [
-         {value: 1, name: "Add departments"},
-         {value: 2, name: "Add employees"},
-         {value: 3, name: "Add roles"},
+         {value: 1, name: "Add department"},
+         {value: 2, name: "Add employee"},
+         {value: 3, name: "Add role"},
          {value: 4, name: "View departments"},
          {value: 5, name: "View employees"},
          {value: 6, name: "View roles"},
