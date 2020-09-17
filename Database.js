@@ -87,7 +87,7 @@ class Database {
                 res.forEach(row => {
                     let managerId = row.manager;
                     let managerName = "nobody";
-                    console.log(managerId);
+                    //console.log(managerId);
                     for (let i = 0; i < res.length; i++){
                         if(res[i].id == managerId){
                             managerName = res[i].first_name + " " + res[i].last_name;

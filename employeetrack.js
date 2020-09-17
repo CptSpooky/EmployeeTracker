@@ -24,7 +24,7 @@ function addDepaMenu () {
       });
 }
 
-// 
+//  gets roles and employees for the addEmpPrompt function 
 function addEmpMenu() {
    let p1 = database.getRoles();
    let p2 = database.getEmployees();
