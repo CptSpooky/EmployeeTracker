@@ -3,7 +3,7 @@ const inquirer = require("inquirer");
 const consoleTable = require("console.table");
 
 const database = new Database();
-console.log("test");
+
 
 // add Department function
 function addDepaMenu () {

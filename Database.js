@@ -10,7 +10,7 @@ class Database {
             host: "localhost",
             port: 3306,// Your port; if not 3306
             user: "root", // Your username
-            password: "",// Your password REMEMBER TO CHANGE
+            password: "pootndoot",// Your password REMEMBER TO CHANGE
             database: "employee_tracker"
           });
         
